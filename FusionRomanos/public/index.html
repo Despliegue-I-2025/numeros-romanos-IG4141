@@ -2,139 +2,30 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conversor Romano ↔ Arábigo</title>
+  <title>Conversor Romano/Árabe</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9fafb;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-
-    .container {
-      background: white;
-      padding: 40px 30px;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 450px;
-      text-align: center;
-    }
-
-    h1 {
-      color: #1e3a8a;
-      margin-bottom: 30px;
-    }
-
-    .section {
-      margin-bottom: 30px;
-    }
-
-    input {
-      width: 80%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid #cbd5e1;
-      text-align: center;
-      font-size: 1rem;
-    }
-
-    button {
-      padding: 10px 25px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s;
-    }
-
-    button.convertRoman {
-      background-color: #2563eb;
-      color: white;
-    }
-
-    button.convertRoman:hover {
-      background-color: #1d4ed8;
-    }
-
-    button.convertArabic {
-      background-color: #16a34a;
-      color: white;
-    }
-
-    button.convertArabic:hover {
-      background-color: #15803d;
-    }
-
-    #resultado {
-      margin-top: 20px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #374151;
-    }
-
-    small {
-      color: #6b7280;
-    }
+    body { font-family: sans-serif; padding: 20px; }
+    input { margin-right: 10px; }
+    .row { margin-bottom: 10px; }
   </style>
 </head>
 <body>
+  <h1>Conversor Romano ↔ Árabe</h1>
 
-<div class="container">
-  <h1>Conversor Romano ↔ Arábigo</h1>
-
-  <!-- Romano a Arábigo -->
-  <div class="section">
-    <input type="text" id="romanInput" placeholder="Escribí un número romano (ej: XV)">
-    <br>
-    <button class="convertRoman" onclick="convertirARabigo()">Convertir a Arábigo</button>
+  <div class="row">
+    <label>Número Romano:</label>
+    <input type="text" id="romanInput">
+    <button id="toArabicBtn">Convertir a Árabe</button>
+    <input type="text" id="arabicResult" readonly placeholder="Resultado">
   </div>
 
-  <!-- Arábigo a Romano -->
-  <div class="section">
-    <input type="number" id="arabicInput" placeholder="Escribí un número arábigo (ej: 24)">
-    <br>
-    <button class="convertArabic" onclick="convertirARomano()">Convertir a Romano</button>
+  <div class="row">
+    <label>Número Árabe:</label>
+    <input type="number" id="arabicInput">
+    <button id="toRomanBtn">Convertir a Romano</button>
+    <input type="text" id="romanResult" readonly placeholder="Resultado">
   </div>
 
-  <div id="resultado"></div>
-  <small>Nota: Números válidos: 1 - 3999</small>
-</div>
-
-<script>
-  async function convertirARabigo() {
-    const valor = document.getElementById('romanInput').value.trim();
-    if(!valor) return alert("Ingresá un número romano.");
-    
-    const res = await fetch(`/r2a?roman=${valor}`);
-    const data = await res.json();
-    if(data.error) {
-      document.getElementById('resultado').textContent = "Error: " + data.error;
-    } else {
-      document.getElementById('resultado').textContent = `Resultado: ${data.arabic}`;
-    }
-  }
-
-  async function convertirARomano() {
-    const valor = document.getElementById('arabicInput').value.trim();
-    if(!valor) return alert("Ingresá un número arábigo.");
-    
-    const res = await fetch(`/a2r?arabic=${valor}`);
-    const data = await res.json();
-    if(data.error) {
-      document.getElementById('resultado').textContent = "Error: " + data.error;
-    } else {
-      document.getElementById('resultado').textContent = `Resultado: ${data.roman}`;
-    }
-  }
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>

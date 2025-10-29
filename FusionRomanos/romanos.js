@@ -1,84 +1,83 @@
-﻿const express = require('express');
+﻿// romanos.js
+const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
-// --- Endpoints ---
-
-// Romanos → Arábigos
-app.get('/r2a', (req, res) => {
-  const romanNumeral = req.query.roman;
-  if (!romanNumeral) {
-    return res.status(400).json({ error: 'Parámetro "roman" requerido.' });
-  }
-
-  const arabicNumber = romanToArabic(romanNumeral);
-  if (arabicNumber === null) {
-    return res.status(400).json({ error: 'Número romano inválido.' });
-  }
-
-  return res.json({ arabic: arabicNumber });
-});
-
-// Arábigos → Romanos
-app.get('/a2r', (req, res) => {
-  const arabicNumber = parseInt(req.query.arabic, 10);
-  if (isNaN(arabicNumber)) {
-    return res.status(400).json({ error: 'Parámetro "arabic" requerido.' });
-  }
-
-  const romanNumeral = arabicToRoman(arabicNumber);
-  if (romanNumeral === null) {
-    return res.status(400).json({ error: 'Número arábigo inválido.' });
-  }
-
-  return res.json({ roman: romanNumeral });
-});
-
-// --- Funciones de conversión ---
-
+// ----------------------
+// Funciones de conversión
+// ----------------------
 function romanToArabic(roman) {
-  const map = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
-  let total = 0;
+  if (!roman || typeof roman !== 'string') return null;
+
+  const map = {I:1, V:5, X:10, L:50, C:100, D:500, M:1000};
+  let total = 0, prev = 0;
+
   roman = roman.toUpperCase();
-
-  for (let i = 0; i < roman.length; i++) {
-    const current = map[roman[i]];
-    const next = map[roman[i + 1]];
-    if (!current) return null; // símbolo no válido
-    if (next && current < next) total -= current;
-    else total += current;
+  for (let i = roman.length - 1; i >= 0; i--) {
+    const num = map[roman[i]];
+    if (!num) return null; // carácter inválido
+    if (num < prev) total -= num;
+    else total += num;
+    prev = num;
   }
-
   return total;
 }
 
 function arabicToRoman(num) {
-  num = parseInt(num);
-  if (isNaN(num) || num <= 0 || num >= 4000) return null;
+  if (!Number.isInteger(num) || num <= 0 || num >= 4000) return null;
 
   const map = [
-    [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'],
-    [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'],
-    [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']
+    ['M',1000], ['CM',900], ['D',500], ['CD',400],
+    ['C',100], ['XC',90], ['L',50], ['XL',40],
+    ['X',10], ['IX',9], ['V',5], ['IV',4], ['I',1]
   ];
 
-  let result = '';
-  for (const [value, symbol] of map) {
+  let roman = '';
+  for (const [letter, value] of map) {
     while (num >= value) {
-      result += symbol;
+      roman += letter;
       num -= value;
     }
   }
-
-  return result;
+  return roman;
 }
 
-// --- Servidor ---
+// ----------------------
+// Servir archivos estáticos
+// ----------------------
+app.use(express.static('public'));
+
+// ----------------------
+// Endpoints
+// ----------------------
+app.get('/r2a', (req, res) => {
+  const { roman } = req.query;
+  if (!roman) return res.status(400).json({ error: 'Falta parámetro roman' });
+
+  const arabic = romanToArabic(roman);
+  if (arabic === null) return res.status(400).json({ error: 'Número romano inválido' });
+
+  res.json({ arabic });
+});
+
+app.get('/a2r', (req, res) => {
+  const arabic = parseInt(req.query.arabic);
+  if (!req.query.arabic) return res.status(400).json({ error: 'Falta parámetro arabic' });
+
+  const roman = arabicToRoman(arabic);
+  if (roman === null) return res.status(400).json({ error: 'Número arábigo inválido' });
+
+  res.json({ roman });
+});
+
+// ----------------------
+// Iniciar servidor si se ejecuta directamente
+// ----------------------
 if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`Servidor de conversor romano-arábigo escuchando en el puerto ${PORT}`);
+  app.listen(port, () => {
+    console.log(`Servidor corriendo en http://localhost:${port}`);
   });
 }
 
-// --- Export para tests ---
+// Exportar para tests
 module.exports = { app, romanToArabic, arabicToRoman };

@@ -4,7 +4,7 @@
   "main": "romanos.js",
   "scripts": {
     "start": "node romanos.js",
-    "test": "jest --verbose"
+    "test": "jest --coverage --verbose"
   },
   "dependencies": {
     "express": "^4.18.2"
@@ -15,9 +15,8 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "rootDir": ".",
-    "testRegex": "(/test/.*\\.test\\.js)$",
-    "moduleFileExtensions": ["js"],
+    "testMatch": ["**/test/**/*.test.js"],
+    "moduleFileExtensions": ["js", "json", "node"],
     "verbose": true
   }
 }
