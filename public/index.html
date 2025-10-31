@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Conversor Romano/Árabe</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input { margin-right: 10px; }
+    .row { margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Conversor Romano ↔ Árabe</h1>
+
+  <div class="row">
+    <label>Número Romano:</label>
+    <input type="text" id="romanInput">
+    <button id="toArabicBtn">Convertir a Árabe</button>
+    <input type="text" id="arabicResult" readonly placeholder="Resultado">
+  </div>
+
+  <div class="row">
+    <label>Número Árabe:</label>
+    <input type="number" id="arabicInput">
+    <button id="toRomanBtn">Convertir a Romano</button>
+    <input type="text" id="romanResult" readonly placeholder="Resultado">
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
