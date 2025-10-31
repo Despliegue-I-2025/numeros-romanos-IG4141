@@ -2,7 +2,7 @@ const { toRoman, toArabic } = require('../api/converter');
 
 // Pruebas de Arábigo a Romano
 describe('toRoman()', () => {
-  test('convierte números simples', () => {
+  test('convierte números  simples.', () => {
     expect(toRoman(1)).toBe('I');
     expect(toRoman(5)).toBe('V');
     expect(toRoman(10)).toBe('X');
