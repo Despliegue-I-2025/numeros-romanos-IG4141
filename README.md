@@ -11,7 +11,7 @@ Proyecto que implementa la conversión bidireccional de números arábigos a rom
 | Componente | Estado | URL de Producción |
 | :--- | :--- | :--- |
 | **Lógica de Negocio** | ✅ Tests Pasados (Jest) | |
-| **Despliegue** | ✅ Funcional (Vercel) | [fusion-romanos.vercel.app](https://romas-kappa.vercel.app/) |
+| **Despliegue** | ✅ Funcional (Vercel) | romas-kappa.vercel.app |
 
 El despliegue está automatizado mediante **GitHub Actions**, garantizando que cada `push` a la rama `main` ejecute las pruebas y se despliegue automáticamente en Vercel.
 
