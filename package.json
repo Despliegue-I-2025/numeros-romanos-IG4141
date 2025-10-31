@@ -1,6 +1,7 @@
 {
   "name": "romanos-arabigos",
   "version": "1.0.0",
+  "type": "module",
   "main": "romanos.js",
   "scripts": {
     "test": "jest --coverage --verbose"
