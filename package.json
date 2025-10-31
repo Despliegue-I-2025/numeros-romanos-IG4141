@@ -3,11 +3,7 @@
   "version": "1.0.0",
   "main": "romanos.js",
   "scripts": {
-    "start": "node romanos.js",
     "test": "jest --coverage --verbose"
-  },
-  "dependencies": {
-    "express": "^4.21.2"
   },
   "devDependencies": {
     "jest": "^29.7.0",
@@ -15,14 +11,8 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "testMatch": [
-      "**/test/**/*.test.js"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "node"
-    ],
+    "testMatch": ["**/test/**/*.test.js"],
+    "moduleFileExtensions": ["js", "json", "node"],
     "verbose": true
   }
 }

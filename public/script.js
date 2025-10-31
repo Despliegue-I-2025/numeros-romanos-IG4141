@@ -10,13 +10,9 @@ document.getElementById('toArabicBtn').addEventListener('click', async () => {
     return;
   }
   try {
-    const res = await fetch(`/r2a?roman=${encodeURIComponent(roman)}`);
+    const res = await fetch(`/api/r2a?roman=${encodeURIComponent(roman)}`);
     const data = await res.json();
-    if (res.ok) {
-      arabicResult.value = data.arabic;
-    } else {
-      arabicResult.value = data.error;
-    }
+    arabicResult.value = res.ok ? data.arabic : data.error;
   } catch (err) {
     arabicResult.value = 'Error de conexión';
   }
@@ -29,13 +25,9 @@ document.getElementById('toRomanBtn').addEventListener('click', async () => {
     return;
   }
   try {
-    const res = await fetch(`/a2r?arabic=${encodeURIComponent(arabic)}`);
+    const res = await fetch(`/api/a2r?arabic=${encodeURIComponent(arabic)}`);
     const data = await res.json();
-    if (res.ok) {
-      romanResult.value = data.roman;
-    } else {
-      romanResult.value = data.error;
-    }
+    romanResult.value = res.ok ? data.roman : data.error;
   } catch (err) {
     romanResult.value = 'Error de conexión';
   }
