@@ -51,7 +51,7 @@ El despliegue está automatizado mediante **GitHub Actions**, garantizando que c
 
 ---
 
-##  Ejecución Local
+##  Verificación de la Lógica
 
 1. **Clonar el repositorio:**
     ```bash
@@ -66,10 +66,8 @@ El despliegue está automatizado mediante **GitHub Actions**, garantizando que c
     ```bash
     npm test
     ```
-4. **Iniciar la API:** Para pruebas locales (la API está optimizada para Vercel, no necesita puerto tradicional).
-    ```bash
-    npm start
-    ```
+4. **Las pruebas garantizan que las funciones de conversión arábigo ↔ romano funcionen correctamente.
+El despliegue y ejecución de la API se realizan automáticamente en Vercel.** 
 
 ---
 
