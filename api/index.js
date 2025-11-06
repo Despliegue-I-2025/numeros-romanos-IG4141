@@ -34,11 +34,12 @@ app.post('/api/convert', (req, res) => {
     }
   } else {
     // Es un número romano (o inválido)
-    result = toArabic(input);
-    type = 'romano_a_arábigo';
-    if (result === null) {
-      return res.status(400).json({ error: 'Número romano inválido.' });
+    const arabicResult = toArabic(input);
+    if (arabicResult && arabicResult.error) {
+      return res.status(400).json({ error: arabicResult.error });
     }
+    result = arabicResult;
+    type = 'romano_a_arábigo';
   }
 
   res.json({

@@ -1,6 +1,8 @@
-// Lógica para convertir de Arábigo a Romano
+// converter.js
+
+// Conversor Arábigo → Romano
 function toRoman(num) {
-  if (typeof num !== 'number' || num < 1 || num > 3999) {
+  if (typeof num !== 'number' || !Number.isInteger(num) || num < 1 || num > 3999) {
     return null;
   }
 
@@ -30,43 +32,49 @@ function toRoman(num) {
   return result;
 }
 
-// Lógica para convertir de Romano a Arábigo
+// Conversor Romano → Arábigo con validación estricta
 function toArabic(roman) {
-  if (typeof roman !== 'string' || roman.length === 0) {
-    return null;
+  if (typeof roman !== 'string' || roman.trim() === '') {
+    return { error: 'Input vacío o no es un string' };
   }
 
-  const romanValues = {
-    I: 1,
-    V: 5,
-    X: 10,
-    L: 50,
-    C: 100,
-    D: 500,
-    M: 1000,
-  };
+  roman = roman.toUpperCase().trim();
+  const romanValues = { I:1, V:5, X:10, L:50, C:100, D:500, M:1000 };
+  const validSubtractPairs = { I:['V','X'], X:['L','C'], C:['D','M'] };
 
   let result = 0;
   let prevValue = 0;
+  let prevChar = '';
+  let repeatCount = 1;
 
-  for (let i = roman.length - 1; i >= 0; i--) {
-    const char = roman[i].toUpperCase();
+  for (let i = 0; i < roman.length; i++) {
+    const char = roman[i];
     const value = romanValues[char];
 
-    if (!value) {
-      return null; // Caracter inválido
+    if (!value) return { error: `Símbolo inválido: '${char}'` };
+
+    // Repeticiones
+    if (char === prevChar) {
+      repeatCount++;
+      if (['V','L','D'].includes(char)) return { error: `Símbolo '${char}' no puede repetirse` };
+      if (repeatCount > 3) return { error: `Símbolo '${char}' repetido más de 3 veces consecutivas` };
+    } else repeatCount = 1;
+
+    // Sustracción
+    if (prevChar && prevValue < value) {
+      if (!validSubtractPairs[prevChar] || !validSubtractPairs[prevChar].includes(char)) {
+        return { error: `Sustracción inválida: '${prevChar}${char}'` };
+      }
+      result -= 2 * prevValue; // Ajusta porque ya sumamos prevValue
     }
 
-    if (value < prevValue) {
-      result -= value;
-    } else {
-      result += value;
-    }
+    result += value;
     prevValue = value;
+    prevChar = char;
   }
 
+  if (result < 1 || result > 3999) return { error: 'Número fuera de rango (1-3999)' };
   return result;
 }
 
-// Exportamos las funciones
 module.exports = { toRoman, toArabic };

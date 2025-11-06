@@ -6,6 +6,7 @@ const { toRoman, toArabic } = require('../api/converter');
 // Tests de funciones internas
 // ===============================
 describe('Funciones de conversión', () => {
+
   // Arábigo → Romano
   describe('toRoman()', () => {
     test('convierte números simples', () => {
@@ -42,12 +43,18 @@ describe('Funciones de conversión', () => {
       expect(toArabic('I')).toBe(1);
       expect(toArabic('V')).toBe(5);
       expect(toArabic('X')).toBe(10);
+      expect(toArabic('L')).toBe(50);
+      expect(toArabic('C')).toBe(100);
+      expect(toArabic('D')).toBe(500);
+      expect(toArabic('M')).toBe(1000);
     });
 
     test('convierte números con sustracción', () => {
       expect(toArabic('IV')).toBe(4);
       expect(toArabic('IX')).toBe(9);
       expect(toArabic('XL')).toBe(40);
+      expect(toArabic('XC')).toBe(90);
+      expect(toArabic('CD')).toBe(400);
       expect(toArabic('CM')).toBe(900);
     });
 
@@ -64,9 +71,19 @@ describe('Funciones de conversión', () => {
       expect(toArabic('mcmxciv')).toBe(1994);
     });
 
-    test('devuelve null para strings inválidos', () => {
-      expect(toArabic('ABC')).toBeNull();
-      expect(toArabic('')).toBeNull();
+    test('devuelve error para strings inválidos', () => {
+      expect(toArabic('ABC').error).toBe("Símbolo inválido: 'A'");
+      expect(toArabic('').error).toBe('Input vacío o no es un string');
+    });
+
+    test('detecta repeticiones inválidas', () => {
+      expect(toArabic('IIII').error).toBe("Símbolo 'I' repetido más de 3 veces consecutivas");
+      expect(toArabic('VV').error).toBe("Símbolo 'V' no puede repetirse");
+    });
+
+    test('detecta sustracciones inválidas', () => {
+      expect(toArabic('IL').error).toBe("Sustracción inválida: 'IL'");
+      expect(toArabic('IC').error).toBe("Sustracción inválida: 'IC'");
     });
   });
 });
@@ -76,43 +93,33 @@ describe('Funciones de conversión', () => {
 // ===============================
 describe('API POST /api/convert', () => {
   test('Convierte número arábigo a romano', async () => {
-    const res = await request(app)
-      .post('/api/convert')
-      .send({ input: '1994' });
+    const res = await request(app).post('/api/convert').send({ input: '1994' });
     expect(res.statusCode).toBe(200);
     expect(res.body.resultado).toBe('MCMXCIV');
     expect(res.body.tipo).toBe('arábigo_a_romano');
   });
 
   test('Convierte romano a número arábigo', async () => {
-    const res = await request(app)
-      .post('/api/convert')
-      .send({ input: 'MCMXCIV' });
+    const res = await request(app).post('/api/convert').send({ input: 'MCMXCIV' });
     expect(res.statusCode).toBe(200);
     expect(res.body.resultado).toBe(1994);
     expect(res.body.tipo).toBe('romano_a_arábigo');
   });
 
   test('Error al enviar input vacío', async () => {
-    const res = await request(app)
-      .post('/api/convert')
-      .send({ input: '' });
+    const res = await request(app).post('/api/convert').send({ input: '' });
     expect(res.statusCode).toBe(400);
     expect(res.body.error).toBe('Input no puede estar vacío.');
   });
 
   test('Error al enviar romano inválido', async () => {
-    const res = await request(app)
-      .post('/api/convert')
-      .send({ input: 'ABCD' });
+    const res = await request(app).post('/api/convert').send({ input: 'ABCD' });
     expect(res.statusCode).toBe(400);
-    expect(res.body.error).toBe('Número romano inválido.');
+    expect(res.body.error).toBe("Símbolo inválido: 'A'");
   });
 
   test('Error al enviar número fuera de rango', async () => {
-    const res = await request(app)
-      .post('/api/convert')
-      .send({ input: '4000' });
+    const res = await request(app).post('/api/convert').send({ input: '4000' });
     expect(res.statusCode).toBe(400);
     expect(res.body.error).toBe('Número fuera de rango (1-3999).');
   });
