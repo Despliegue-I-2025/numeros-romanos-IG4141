@@ -6,8 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const handleConversion = async () => {
     const inputValue = inputEl.value.trim();
-    
-    // Limpiar estado previo
+
     outputEl.textContent = '';
     errorEl.textContent = '';
 
@@ -17,38 +16,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      // Llamamos a nuestra API
-      // Usamos una ruta relativa '/api/convert' que Vercel manejará
       const response = await fetch('/api/convert', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ input: inputValue }),
       });
 
       const data = await response.json();
 
-      if (!response.ok) {
-        // Error de la API (ej: 400)
-        throw new Error(data.error || 'Ocurrió un error');
-      }
+      if (!response.ok) throw new Error(data.error || 'Ocurrió un error');
 
-      // Éxito: Mostrar en la caja de la derecha
       outputEl.textContent = data.resultado;
 
     } catch (error) {
-      // Error de red o error de la API
       errorEl.textContent = error.message;
     }
   };
 
   convertBtn.addEventListener('click', handleConversion);
-
-  // Opcional: permitir convertir con "Enter"
   inputEl.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      handleConversion();
-    }
+    if (e.key === 'Enter') handleConversion();
   });
 });

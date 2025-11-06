@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-R">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convertidor Romano</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convertidor Romano</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Convertidor de Números Romanos</h1>
-        <p>Escribe un número (ej: 1994) o un número romano (ej: MCMXCIV).</p>
-        
-        <div class="converter-wrapper">
-            <div class="input-section">
-                <label for="input-value">Valor:</label>
-                <input type="text" id="input-value" placeholder="Escribe aquí...">
-                <button id="convert-btn">Convertir</button>
-            </div>
-            
-            <div class="output-section">
-                <label for="output-value">Resultado:</label>
-                <div id="output-value" class="result-box">
-                    </div>
-            </div>
-        </div>
-        <p id="error-message" class="error"></p>
+  <div class="container">
+    <h1>Convertidor de Números Romanos</h1>
+    <p>Escribe un número (ej: 1994) o un número romano (ej: MCMXCIV).</p>
+
+    <div class="converter-wrapper">
+      <div class="input-section">
+        <label for="input-value">Valor:</label>
+        <input type="text" id="input-value" placeholder="Escribe aquí...">
+        <button id="convert-btn">Convertir</button>
+      </div>
+      <div class="output-section">
+        <label for="output-value">Resultado:</label>
+        <div id="output-value" class="result-box"></div>
+      </div>
     </div>
-    
-    <script src="script.js"></script>
+
+    <p id="error-message" class="error"></p>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

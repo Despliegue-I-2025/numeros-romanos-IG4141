@@ -1,7 +1,7 @@
 // Lógica para convertir de Arábigo a Romano
 function toRoman(num) {
   if (typeof num !== 'number' || num < 1 || num > 3999) {
-    return null; // O manejar el error como prefieras
+    return null;
   }
 
   const romanNumerals = [
@@ -64,8 +64,9 @@ function toArabic(roman) {
     }
     prevValue = value;
   }
+
   return result;
 }
 
-// Exportamos las funciones para usarlas en la API y en los tests
+// Exportamos las funciones
 module.exports = { toRoman, toArabic };

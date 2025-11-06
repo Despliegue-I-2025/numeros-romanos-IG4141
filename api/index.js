@@ -1,14 +1,18 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { toRoman, toArabic } = require('./converter');
 
 const app = express();
 
-// Middlewares
-app.use(cors()); // Permite peticiones desde el frontend
-app.use(express.json()); // Parsea body JSON
+// === Middlewares ===
+app.use(cors());
+app.use(express.json());
 
-// Endpoint principal de conversión
+// Servir frontend local (solo para desarrollo local)
+app.use(express.static(path.join(__dirname, '../public')));
+
+// === Endpoint principal de conversión ===
 app.post('/api/convert', (req, res) => {
   const { input } = req.body;
 
@@ -19,7 +23,6 @@ app.post('/api/convert', (req, res) => {
   let result;
   let type;
 
-  // Intenta parsear como número primero
   const numberInput = parseInt(input, 10);
 
   if (!isNaN(numberInput) && String(numberInput) === String(input)) {
@@ -47,3 +50,11 @@ app.post('/api/convert', (req, res) => {
 
 // Exporta la app para Vercel
 module.exports = app;
+
+// === Ejecución local ===
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Servidor local ejecutándose en: http://localhost:${PORT}`);
+  });
+}

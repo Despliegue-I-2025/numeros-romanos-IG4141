@@ -28,17 +28,16 @@ p {
   font-size: 0.9rem;
 }
 
-/* Este es el layout principal (flexbox) */
 .converter-wrapper {
   display: flex;
-  flex-wrap: wrap; /* Para que en móviles se ponga uno debajo de otro */
-  gap: 2rem; /* Espacio entre las cajas */
+  flex-wrap: wrap;
+  gap: 2rem;
   margin-top: 1.5rem;
 }
 
 .input-section, .output-section {
-  flex: 1; /* Ambas cajas intentan ocupar el mismo espacio */
-  min-width: 200px; /* Ancho mínimo antes de envolverse */
+  flex: 1;
+  min-width: 200px;
   display: flex;
   flex-direction: column;
 }
@@ -72,7 +71,6 @@ button:hover {
   background-color: #0056b3;
 }
 
-/* La caja de resultado a la derecha */
 .result-box {
   border: 1px solid #ccc;
   background-color: #f9f9f9;
@@ -81,7 +79,7 @@ button:hover {
   font-size: 1.2rem;
   font-weight: bold;
   color: #333;
-  min-height: 40px; /* Misma altura que el input + padding */
+  min-height: 40px;
   display: flex;
   align-items: center;
 }

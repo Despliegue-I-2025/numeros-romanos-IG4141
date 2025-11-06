@@ -5,7 +5,8 @@
   "main": "api/index.js",
   "scripts": {
     "start": "node api/index.js",
-    "test": "jest"
+    "dev": "nodemon api/index.js",
+    "test": "jest --coverage"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -13,6 +14,14 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "supertest": "^7.0.0"
+    "supertest": "^7.0.0",
+    "nodemon": "^3.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "roots": ["<rootDir>/test"]
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
