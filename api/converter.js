@@ -1,89 +1,67 @@
-// converter.js
-
-// -------------------------------
-// Conversor Arábigo → Romano
-// -------------------------------
 function toRoman(num) {
-  if (typeof num !== 'number' || !Number.isInteger(num) || num < 1 || num > 3999) {
-    return null;
-  }
-
-  const romanNumerals = [
-    { value: 1000, numeral: 'M' },
-    { value: 900, numeral: 'CM' },
-    { value: 500, numeral: 'D' },
-    { value: 400, numeral: 'CD' },
-    { value: 100, numeral: 'C' },
-    { value: 90, numeral: 'XC' },
-    { value: 50, numeral: 'L' },
-    { value: 40, numeral: 'XL' },
-    { value: 10, numeral: 'X' },
-    { value: 9, numeral: 'IX' },
-    { value: 5, numeral: 'V' },
-    { value: 4, numeral: 'IV' },
-    { value: 1, numeral: 'I' },
-  ];
-
-  let result = '';
-  for (const { value, numeral } of romanNumerals) {
+  if (num < 1 || num > 3999) return null
+  const map = [
+    ['M', 1000],
+    ['CM', 900],
+    ['D', 500],
+    ['CD', 400],
+    ['C', 100],
+    ['XC', 90],
+    ['L', 50],
+    ['XL', 40],
+    ['X', 10],
+    ['IX', 9],
+    ['V', 5],
+    ['IV', 4],
+    ['I', 1]
+  ]
+  let result = ''
+  for (const [roman, value] of map) {
     while (num >= value) {
-      result += numeral;
-      num -= value;
+      result += roman
+      num -= value
     }
   }
-
-  return result;
+  return result
 }
 
-// -------------------------------
-// Conversor Romano → Arábigo
-// -------------------------------
 function toArabic(roman) {
-  if (typeof roman !== 'string' || roman.trim() === '') {
-    return { error: 'Input vacío o no es un string' };
-  }
+  if (typeof roman !== 'string' || roman.trim() === '') return { error: 'Entrada inválida.' }
+  const map = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 }
+  const upper = roman.toUpperCase()
+  let total = 0
+  let prev = 0
+  let repeatCount = 0
+  let lastChar = ''
 
-  roman = roman.toUpperCase().trim();
+  for (let i = upper.length - 1; i >= 0; i--) {
+    const curr = map[upper[i]]
+    if (!curr) return { error: `Símbolo inválido: '${upper[i]}'` }
 
-  const romanValues = { I:1, V:5, X:10, L:50, C:100, D:500, M:1000 };
-  const validSubtractPairs = { I:['V','X'], X:['L','C'], C:['D','M'] };
-
-  let result = 0;
-  let prevValue = 0;
-  let prevChar = null;
-  let repeatCount = 1;
-
-  for (let i = 0; i < roman.length; i++) {
-    const char = roman[i];
-    const value = romanValues[char];
-
-    if (!value) return { error: `Símbolo inválido: '${char}'` };
-
-    // Repeticiones
-    if (char === prevChar) {
-      repeatCount++;
-      if (['V','L','D'].includes(char)) return { error: `Símbolo '${char}' no puede repetirse` };
-      if (repeatCount > 3) return { error: `Símbolo '${char}' repetido más de 3 veces consecutivas` };
-    } else {
-      repeatCount = 1;
-    }
-
-    // Sustracción
-    if (prevChar && prevValue < value) {
-      if (!validSubtractPairs[prevChar] || !validSubtractPairs[prevChar].includes(char)) {
-        return { error: `Sustracción inválida: '${prevChar}${char}'` };
+    if (upper[i] === lastChar) {
+      repeatCount++
+      if ((['V', 'L', 'D'].includes(upper[i]) && repeatCount > 1) ||
+          (['I', 'X', 'C', 'M'].includes(upper[i]) && repeatCount > 3)) {
+        return { error: `Repetición inválida: '${upper[i]}'` }
       }
-      result -= 2 * prevValue; // Ajusta porque ya sumamos prevValue antes
+    } else {
+      repeatCount = 1
+      lastChar = upper[i]
     }
 
-    result += value;
-    prevValue = value;
-    prevChar = char;
+    if (curr < prev) {
+      if (!((curr === 1 && (prev === 5 || prev === 10)) ||
+            (curr === 10 && (prev === 50 || prev === 100)) ||
+            (curr === 100 && (prev === 500 || prev === 1000)))) {
+        return { error: `Sustracción inválida: '${upper[i]}'` }
+      }
+      total -= curr
+    } else {
+      total += curr
+    }
+    prev = curr
   }
-
-  if (result < 1 || result > 3999) return { error: 'Número fuera de rango (1-3999)' };
-  return result;
+  return total
 }
 
-// Exportamos las funciones
-module.exports = { toRoman, toArabic };
+module.exports = { toRoman, toArabic }
