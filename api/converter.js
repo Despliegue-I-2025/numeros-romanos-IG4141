@@ -1,6 +1,8 @@
 // converter.js
 
+// -------------------------------
 // Conversor Arábigo → Romano
+// -------------------------------
 function toRoman(num) {
   if (typeof num !== 'number' || !Number.isInteger(num) || num < 1 || num > 3999) {
     return null;
@@ -29,22 +31,26 @@ function toRoman(num) {
       num -= value;
     }
   }
+
   return result;
 }
 
-// Conversor Romano → Arábigo con validación estricta
+// -------------------------------
+// Conversor Romano → Arábigo
+// -------------------------------
 function toArabic(roman) {
   if (typeof roman !== 'string' || roman.trim() === '') {
     return { error: 'Input vacío o no es un string' };
   }
 
   roman = roman.toUpperCase().trim();
+
   const romanValues = { I:1, V:5, X:10, L:50, C:100, D:500, M:1000 };
   const validSubtractPairs = { I:['V','X'], X:['L','C'], C:['D','M'] };
 
   let result = 0;
   let prevValue = 0;
-  let prevChar = '';
+  let prevChar = null;
   let repeatCount = 1;
 
   for (let i = 0; i < roman.length; i++) {
@@ -58,14 +64,16 @@ function toArabic(roman) {
       repeatCount++;
       if (['V','L','D'].includes(char)) return { error: `Símbolo '${char}' no puede repetirse` };
       if (repeatCount > 3) return { error: `Símbolo '${char}' repetido más de 3 veces consecutivas` };
-    } else repeatCount = 1;
+    } else {
+      repeatCount = 1;
+    }
 
     // Sustracción
     if (prevChar && prevValue < value) {
       if (!validSubtractPairs[prevChar] || !validSubtractPairs[prevChar].includes(char)) {
         return { error: `Sustracción inválida: '${prevChar}${char}'` };
       }
-      result -= 2 * prevValue; // Ajusta porque ya sumamos prevValue
+      result -= 2 * prevValue; // Ajusta porque ya sumamos prevValue antes
     }
 
     result += value;
@@ -77,4 +85,5 @@ function toArabic(roman) {
   return result;
 }
 
+// Exportamos las funciones
 module.exports = { toRoman, toArabic };
