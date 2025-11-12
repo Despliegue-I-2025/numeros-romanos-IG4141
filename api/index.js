@@ -46,6 +46,22 @@ app.get('/api/r2a', (req, res) => {
   res.json({ arabic: arabicResult })
 })
 
+// ---- Alias sin /api ----
+app.post('/convert', (req, res) => {
+  req.url = '/api/convert'
+  app._router.handle(req, res)
+})
+
+app.get('/a2r', (req, res) => {
+  req.url = '/api/a2r'
+  app._router.handle(req, res)
+})
+
+app.get('/r2a', (req, res) => {
+  req.url = '/api/r2a'
+  app._router.handle(req, res)
+})
+
 // ---- Interfaz pública ----
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'))
