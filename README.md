@@ -1,76 +1,164 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/gJA-GD-V)
 
-#  Convertidor de Números Romanos ( Full-Stack )
+# Convertidor de Números Romanos (Full-Stack)
 
-Proyecto que implementa la conversión bidireccional de números arábigos a romanos (y viceversa) mediante una API RESTful y una interfaz de usuario simple y funcional.
-
----
-
-## 🚀 Estado y Despliegue
-
-| Componente | Estado | URL de Producción |
-| :--- | :--- | :--- |
-| **Lógica de Negocio** | ✅ Tests Pasados (Jest) | |
-| **Despliegue** | ✅ Funcional (Vercel) | romas-kappa.vercel.app |
-
-El despliegue está automatizado mediante **GitHub Actions**, garantizando que cada `push` a la rama `main` ejecute las pruebas y se despliegue automáticamente en Vercel.
+Aplicación **Full Stack** que permite la conversión **bidireccional** entre números **arábigos ↔ romanos**, mediante una **API RESTful** y una interfaz web simple.
+El proyecto incluye **tests automatizados con Jest**, **CI/CD con GitHub Actions** y **despliegue en Vercel**.
 
 ---
 
-##  Tecnologías Utilizadas
+## Estado y despliegue
 
-### Backend (API REST)
-* **Node.js** (v18+)
-* **Express.js:** Framework minimalista para crear los *endpoints* de la API.
-* **CORS:** Permite la comunicación entre el frontend y el backend.
-* **Jest:** Framework de testing para garantizar la precisión de las conversiones.
+| Componente                   | Estado               | URL                                                                                                  |
+| :--------------------------- | :------------------- | :--------------------------------------------------------------------------------------------------- |
+| **API (Backend)**            |  Activa y funcional | [https://romas-kappa.vercel.app/api/a2r?arabic=42](https://romas-kappa.vercel.app/api/a2r?arabic=42) |
+| **Interfaz Web (Frontend)**  |  Online             | [https://romas-kappa.vercel.app](https://romas-kappa.vercel.app)                                     |
+| **Tests automáticos (Jest)** |  100% Pasados       | Cobertura: 95% líneas                                                                                |
 
-### Frontend
-* **HTML5 / CSS3:** Estructura y estilos de la interfaz de usuario.
-* **JavaScript (Vanilla JS):** Lógica del cliente para realizar peticiones `fetch` a la API.
-
-### CI/CD y Despliegue
-* **GitHub Actions:** Automatiza pruebas (`npm test`) y despliegue (`vercel deploy`).
-* **Vercel:** Plataforma para *Serverless Functions* (API) y frontend estático.
+El despliegue está **automatizado mediante GitHub Actions**, ejecutando pruebas unitarias (`npm test`) antes de enviar el build final a **Vercel**.
+Cada *push* o *merge* en la rama `main` activa el flujo CI/CD completo.
 
 ---
 
-##  Endpoints de la API
+## Descripción técnica
 
-| Método | Endpoint | Descripción | Parámetros Requeridos |
-| :--- | :--- | :--- | :--- |
-| **GET** | `/api/a2r` | Convierte un número Arábigo a Romano | `arabic` (ej: `?arabic=1994`) |
-| **GET** | `/api/r2a` | Convierte un número Romano a Arábigo | `roman` (ej: `?roman=MCMXCIV`) |
+### Arquitectura general
 
-### Ejemplos de Petición
+* **Backend:** Implementado en **Node.js (v18+)** con **Express.js**.
+* **Frontend:** HTML5 + CSS3 + JavaScript vanilla.
+* **Ejecución:**
 
-| Conversión | Solicitud | Respuesta Esperada |
-| :--- | :--- | :--- |
-| **Arábigo a Romano** | `/api/a2r?arabic=42` | `{"roman": "XLII"}` |
-| **Romano a Arábigo** | `/api/r2a?roman=XLII` | `{"arabic": 42}` |
+  * Localmente mediante `npm run dev`
+  * En producción mediante *Serverless Functions* de **Vercel**.
 
----
+### Funcionalidad principal
 
-##  Verificación de la Lógica
+El servidor ofrece endpoints REST que permiten:
 
-1. **Clonar el repositorio:**
-    ```bash
-    git clone https://github.com/Despliegue-I-2025/numeros-romanos-IG4141.git
-    cd numeros-romanos-IG4141
-    ```
-2. **Instalar dependencias:**
-    ```bash
-    npm install
-    ```
-3. **Ejecutar tests:** Para verificar que la lógica de conversión funciona correctamente.
-    ```bash
-    npm test
-    ```
-4. **Las pruebas garantizan que las funciones de conversión arábigo ↔ romano funcionen correctamente.
-El despliegue y ejecución de la API se realizan automáticamente en Vercel.** 
+1. Convertir números **arábigos → romanos**.
+2. Convertir números **romanos → arábigos**.
+3. Validar entradas, manejar errores y devolver respuestas en formato **JSON**.
 
 ---
 
-##  Autor
+## Endpoints de la API
 
-* **Ivo Giuliano Cappetto**
+> **Los endpoints están disponibles tanto con prefijo `/api` como sin él.**
+> Por ejemplo, `/api/a2r` y `/a2r` funcionan de igual manera, tanto localmente como en Vercel.
+
+| Método    | Endpoint                   | Descripción                                                    | Parámetros                                  | Ejemplo               |
+| :-------- | :------------------------- | :------------------------------------------------------------- | :------------------------------------------ | :-------------------- |
+| **GET**   | `/api/a2r`                 | Convierte de arábigo a romano                                  | `arabic` (int)                              | `/api/a2r?arabic=42`  |
+| **GET**   | `/api/r2a`                 | Convierte de romano a arábigo                                  | `roman` (string)                            | `/api/r2a?roman=XLII` |
+| **POST**  | `/api/convert`             | Conversión automática detectando tipo de input                 | `{ "input": "42" }` o `{ "input": "XLII" }` |                       |
+| **Alias** | `/a2r`, `/r2a`, `/convert` | Versiones sin `/api` para compatibilidad con navegador directo | Idénticos                                   | `/a2r?arabic=42`      |
+
+---
+
+### Ejemplos de respuesta
+
+```json
+// GET /api/a2r?arabic=42
+{ "roman": "XLII" }
+
+// GET /api/r2a?roman=XLII
+{ "arabic": 42 }
+
+// POST /api/convert { "input": "XLII" }
+{ "original": "XLII", "resultado": 42, "tipo": "romano_a_arábigo" }
+```
+
+---
+
+## Testing (Jest)
+
+El proyecto incluye **tests unitarios y de integración** realizados con **Jest** y **Supertest**, cubriendo:
+
+* Conversión arábigo → romano
+* Conversión romano → arábigo
+* Casos borde (números fuera de rango, errores de formato)
+* Endpoints locales (`localhost`) y desplegados en **Vercel**
+
+### Ejecución de pruebas
+
+```bash
+npm test
+```
+
+**Resultado actual:**
+
+```
+Tests:       17 passed, 17 total
+Coverage:    95% líneas, 87% ramas
+```
+
+---
+
+## Ejecución local
+
+1. **Clonar el repositorio**
+
+   ```bash
+   git clone https://github.com/Despliegue-I-2025/numeros-romanos-IG4141.git
+   cd numeros-romanos-IG4141
+   ```
+
+2. **Instalar dependencias**
+
+   ```bash
+   npm install
+   ```
+
+3. **Ejecutar en modo desarrollo**
+
+   ```bash
+   npm run dev
+   ```
+
+   El servidor quedará disponible en:
+    [http://localhost:3000](http://localhost:3000)
+
+4. **Probar endpoints localmente**
+
+   ```
+   http://localhost:3000/a2r?arabic=42
+   http://localhost:3000/r2a?roman=XLII
+   http://localhost:3000/api/convert
+   ```
+
+---
+
+##  Despliegue en Vercel
+
+* El proyecto se despliega automáticamente desde GitHub.
+* **Build Command:** `npm install && npm test`
+* **Output Directory:** `/public`
+* **Serverless Functions:** alojadas en `/api`
+
+La configuración está definida en:
+
+* `vercel.json` (rutas y funciones serverless)
+* `.github/workflows/main.yml` (flujo CI/CD automático)
+
+---
+
+## Particularidades técnicas
+
+* Implementación modular: `converter.js` maneja la lógica pura, `index.js` gestiona las rutas Express.
+* Compatible con Node 18+.
+* Tests verifican **entorno local y remoto (Vercel)**.
+* Soporte doble de rutas (`/api/...` y `/...`) para máxima compatibilidad en clientes y navegadores.
+
+---
+
+## Autor
+
+**Nombre:** Ivo Giuliano Cappetto
+
+
+**Repositorio:** [https://github.com/Despliegue-I-2025/numeros-romanos-IG4141](https://github.com/Despliegue-I-2025/numeros-romanos-IG4141)
+
+
+**Deploy:** [https://romas-kappa.vercel.app](https://romas-kappa.vercel.app)
+
+---
